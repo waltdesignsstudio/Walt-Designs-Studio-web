@@ -41,7 +41,13 @@ const AIPlanner = () => {
       setResponse(result.text || 'Sorry, I couldn\'t generate a plan at this moment.');
     } catch (error: any) {
       console.error('AI Planner Error:', error);
-      const errorMessage = error?.message || 'An unexpected error occurred.';
+      let errorMessage = error?.message || 'An unexpected error occurred.';
+      
+      // Check for specific API key invalid error
+      if (errorMessage.includes('API key not valid') || errorMessage.includes('API_KEY_INVALID')) {
+        errorMessage = "The Gemini API key provided is invalid. Please check the 'Settings' menu in AI Studio and ensure your GEMINI_API_KEY is correct and active.";
+      }
+      
       setResponse(`### ⚠️ Error\n\n${errorMessage}`);
     } finally {
       setLoading(false);
